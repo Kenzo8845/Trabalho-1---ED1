@@ -8,7 +8,6 @@
 
 #include <stdbool.h>
 
-
 /*
 * Declaração opaca da pilha.
 */
@@ -22,20 +21,18 @@ Pilha pilha_cria();
 
 /*
 * Empilha um elemento no topo da pilha.
-* Parametrtos:
+* Parametros:
 * - p: uma pilha ja existente 
-* - e: um elemento que sera olocado no topo.
+* - e: um elemento que sera alocado no topo.
 */
-
 void pilha_adicionaAoTopo(Pilha p, void* e);
 
 /*
 * Retira o elemento do topo da pilha.
-* Paramentros: a pilha em qual vai ser retirado o elemento.
+* Parametros: a pilha em qual vai ser retirado o elemento.
 * Retorna:
-* - Um ponteiro para o elemento retirado,ou NULL, caso a pilha esteja vazia.
+* - Um ponteiro para o elemento retirado, ou NULL, caso a pilha esteja vazia.
 */
-
 void* pilha_retiraDoTopo(Pilha p);
 
 /*
@@ -43,11 +40,20 @@ void* pilha_retiraDoTopo(Pilha p);
 * Parametros: a pilha qual sera retornado o tamanho.
 * Retorna: o tamanho da pilha.
 */
-
 int pilha_tamanho(Pilha p);
 
 /*
+* Verifica se a pilha esta vazia.
+* Parametros: a pilha a ser verificada.
+* Retorna:  
+* True: caso ela esteja vazia.
+* False: caso haja qualquer elemento nela.
+*/
+bool pilha_vazia(Pilha p);
+
+/*
 * Libera toda a memória usada pela pilha.
+* Parametros: a pilha 'p' a ser destruida.
 * IMPORTANTE: não libera a memória dos elementos apontados.
 */
 void pilha_destruir(Pilha p);
