@@ -20,6 +20,7 @@ typedef struct Pilha {
 Pilha pilha_cria() {
     EstruturaPilha *PilhaNova = (EstruturaPilha*) malloc(sizeof(EstruturaPilha));
     if (PilhaNova == NULL) {
+        printf("erro ao criar pilha nova");
         Return NULL;
         // Caso haja erro de alocação.
     }
@@ -29,7 +30,7 @@ Pilha pilha_cria() {
     return(Pilha) PilhaNova;
 }
 
-Pilha pilha_adicionaAoTopo(Pilha p, void* elemento) {
+void pilha_adicionaAoTopo(Pilha p, void* elemento) {
      EstruturaPilha *pilha = (EstruturaPilha *) p;
 
     if (pilha == NULL || elemento == NULL) {
@@ -49,7 +50,7 @@ Pilha pilha_adicionaAoTopo(Pilha p, void* elemento) {
     pilha->topo = NovoTopo;
 }
 
-Pilha pilha_retiraDoTopo(Pilha p) {
+void* pilha_retiraDoTopo(Pilha p) {
     EstruturaPilha *pilha = (EstruturaPilha*) p;
     if(pilha == NULL) {
         return;
@@ -72,7 +73,32 @@ Pilha pilha_retiraDoTopo(Pilha p) {
     pilha->tamanho--;
 
     return ItemRetorno;
+}
 
+int pilha_tamanho(Pilha p) {
+    EstruturaPilha *pilha = (EstruturaPilha*) p;
+    if(pilha == NULL) {
+        return;
+        // A pilha não foi criada.
+    }
+
+    return pilha->tamanho;
+}
+
+bool pilha_vazia(Pilha p) {
+    EstruturaPilha *pilha = (EstruturaPilha*) p;
+    if(pilha == NULL) {
+        return;
+        // A pilha não foi criada.
+    }
+    
+    if (pilha->tamanho == 0) {
+        return true;
+    }
+    
+    else {
+        return false;
+    }
 }
 
 
