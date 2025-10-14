@@ -101,5 +101,23 @@ bool pilha_vazia(Pilha p) {
     }
 }
 
+void fila_pilha(Pilha p) {
+    EstruturaPilha* pilha = (EstruturaPilha*) p;
+    if (pilha == NULL) {
+        printf("nao foi possivel criar a pilha em: pilha_destruir");
+        // Erro ao criar a pilha.
+        return;
+    }
+
+    NoPilha *atual = pilha->topo;
+    while (atual != NULL) {
+        NoPilha *prox = atual->prox;
+        free(atual);
+        atual = prox;
+    }
+
+    free(pilha);
+}
+
 
 
