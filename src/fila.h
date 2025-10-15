@@ -39,7 +39,7 @@ void* fila_retiraDoInicio(Fila f);
 * Parametros: a fila 'f' qual sera retornado o tamanho.
 * Retorna: o tamanho da fila.
 */
-int fila_tamanho(fila f);
+int fila_tamanho(Fila f);
 
 /*
 * Verifica se a fila esta vazia.
@@ -59,4 +59,4 @@ void fila_destruir(Fila f);
 
 
 
-#endif;
+#endif

@@ -67,6 +67,7 @@ void fila_adicionaAoFim(Fila f, void* elemento) {
 void* fila_retiraDoInicio(Fila f) {
     EstruturaFila* fila = (EstruturaFila*) f;
     if (fila == NULL) {
+        // Erro ao criar a fila.
         print("nao foi possivel criar a fila em: fila_retiraDoInicio");
         return;
     }
@@ -76,5 +77,59 @@ void* fila_retiraDoInicio(Fila f) {
         return;
     }
 
+    // Cria uma variável temporária para o Node a ser retirado.
+    NoFila* ItemRetirado = fila->Inicio;
 
+    void* ItemRetorno = fila->Inicio->Elemento;
+
+    fila->Inicio = fila->Inicio->prox;
+
+    free(ItemRetirado);
+
+    fila->tamanho--;
+
+    return ItemRetorno;
+}
+
+int fila_tamanho(Fila f) {
+    EstruturaFila* fila = (EstruturaFila*) f;
+    if (fila == NULL) {
+        printf("nao foi possivel criar a fila em: fila_tamanho");
+        // Erro ao criar a fila.
+        return 0;
+    }
+
+    return fila->tamanho;
+}
+
+bool fila_vazia(Fila f) {
+ EstruturaFila* fila = (EstruturaFila*) f;
+    if (fila == NULL) {
+        printf("nao foi possivel criar a fila em: fila_vazia");
+        // Erro ao criar a fila.
+        return;
+    }
+    if (fila->tamanho == 0) {
+        return true;
+    }
+
+    return false;
+}
+
+void fila_destruir(Fila f) {
+    EstruturaFila* fila = (EstruturaFila*) f;
+    if (fila == NULL) {
+        printf("nao foi possivel criar a fila em: fila_destruir");
+        // Erro ao criar a fila.
+        return;
+    }
+
+    NoFila *atual = fila->Inicio;
+    while (atual != NULL) {
+        NoFila *prox = atual->prox;
+        free(atual);
+        atual = prox;
+    }
+
+    free(fila);
 }
