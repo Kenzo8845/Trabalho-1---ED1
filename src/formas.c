@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
+
+
+/*======================*/
+/*  Structs das formas  */ 
+/*======================*/
 typedef enum {
     TIPO_CIRCULO,
     TIPO_RETANGULO,
@@ -48,6 +55,13 @@ typedef struct {
     } dados;
 } EstruturaForma;
 
+
+
+
+
+/*==========================*/
+/*  Constructors das formas */
+/*==========================*/
 Forma circulo_cria(int i, double x, double y, double r, char *corb, char *corp) {
     EstruturaForma *NovoCirculo = (EstruturaForma*) malloc(sizeof(EstruturaForma));
     if (NovoCirculo == NULL) {
@@ -129,6 +143,13 @@ Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char
     return (Forma)NovoTexto;
 }
 
+
+
+
+
+/*==========================*/
+/*  Destructor das formas   */
+/*==========================*/
 void forma_destruir(Forma f) {
 
     EstruturaForma *forma = (EstruturaForma *)f;
@@ -161,10 +182,17 @@ void forma_destruir(Forma f) {
     free(forma); 
 }
 
+
+
+
+
+/*====================*/
+/* Getters das formas */
+/*====================*/
 int forma_getId(Forma f) {
     EstruturaForma *forma = (EstruturaForma *)f;
     if (f == NULL) { 
-    return -1;
+        return -1;
     }
 
     return forma->id;
@@ -173,7 +201,7 @@ int forma_getId(Forma f) {
 double forma_getArea(Forma f) {
     EstruturaForma *forma = (EstruturaForma *)f;
     if (f == NULL) { 
-    return -1;
+        return -1;
     }
 
     double area;
@@ -205,8 +233,9 @@ double forma_getArea(Forma f) {
     return -1;
 }
 
-char* forma_getCorComplementar(char* cor) {
+static char* forma_getCorComplementar(char* cor) {
      if (cor == NULL || cor[0] != '#') {
+        printf("Erro(0) em getCorComplementar!");
         // Tratar erro ou cor invalida
         return NULL;
     }
@@ -218,36 +247,180 @@ char* forma_getCorComplementar(char* cor) {
     unsigned int b_comp = 255 - b;
 
     char *corComp = (char *)malloc(sizeof(char) * 8); 
-    if (corComp == NULL) 
-    return NULL; // Verifica alocação
+    if (corComp == NULL) {
+        printf("Erro(1) em getCorComplementar!");
+        return NULL; // Verifica alocação
+    }
 
 sprintf(corComp, "#%02X%02X%02X", r_comp, g_comp, b_comp);
 
 return corComp;
 }
 
+char* forma_getCorPreenchimento(Forma f) {
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(0) em getCorPreenchimento!") ;
+        return NULL;
+    }
+
+     switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            return forma->dados.circulo.corp;
+       
+        case TIPO_RETANGULO:
+            return forma->dados.retangulo.corp;
+
+        case TIPO_LINHA:
+            return forma->dados.linha.cor;
+
+        case TIPO_TEXTO:
+            return forma->dados.texto.corp;
+    }
+
+    printf("Erro(1) em getCorPreenchimento");
+    return NULL;
+}
+
+char* forma_getCorBorda(Forma f) {
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(0) em getCorBorda!") ;
+        return NULL;
+    }
+
+     switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            return forma->dados.circulo.corb;
+       
+        case TIPO_RETANGULO:
+            return forma->dados.retangulo.corb;
+
+        case TIPO_LINHA:
+            return forma->dados.linha.cor;
+
+        case TIPO_TEXTO:
+            return forma->dados.texto.corb;
+    }
+
+    printf("Erro(1) em getCorBorda");
+    return NULL;
+}
+
+
+
+
+
+/*==================================*/
+/*  Setters e operações das formas  */
+/*==================================*/
+void forma_setCorBorda(Forma f, char* novaCorBorda) {
+    if (novaCorBorda == NULL || novaCorBorda[0] != '#') {
+        printf("Erro(0) em setCorBorda!");
+        // Tratar erro ou cor invalida
+        return;
+    }
+
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(1) em setCorBorda!") ;
+        return;
+    }
+
+    char *novaCorAlocada = strdup(novaCorBorda);
+    if (novaCorAlocada == NULL) {
+        printf("Erro(2) em setCorBorda");
+        return;
+    } 
+
+
+      switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            free(forma->dados.circulo.corp);
+            forma->dados.circulo.corb = novaCorAlocada;
+
+        case TIPO_RETANGULO:
+            free(forma->dados.retangulo.corp);
+            forma->dados.retangulo.corb = novaCorAlocada;
+
+        case TIPO_LINHA:
+            free(forma->dados.linha.cor);
+            forma->dados.linha.cor = novaCorAlocada;
+        
+        case TIPO_TEXTO:
+            free(forma->dados.texto.corp);
+            forma->dados.texto.corb = novaCorAlocada;
+    }
+    printf("Erro(3) em setCorBorda");
+    return;
+}
+
 Forma forma_clonar(Forma original, int novoId) {
     EstruturaForma *forma = (EstruturaForma *)original;
     if (original == NULL) { 
-    return NULL;
+        return NULL;
     }
 
     switch (forma->tipo) {
         case TIPO_CIRCULO:
-        return (Forma)circulo_cria(novoId, forma->dados.circulo.x, forma->dados.circulo.y, forma->dados.circulo.r, forma->dados.circulo.corp, forma->dados.circulo.corb);
+            return (Forma)circulo_cria(novoId, forma->dados.circulo.x, forma->dados.circulo.y, forma->dados.circulo.r, forma->dados.circulo.corp, forma->dados.circulo.corb);
 
         case TIPO_RETANGULO:
-        return(Forma)retangulo_cria(novoId, forma->dados.retangulo.x, forma->dados.retangulo.y, forma->dados.retangulo.w, forma->dados.retangulo.h, forma->dados.retangulo.corp, forma->dados.retangulo.corb);
+            return(Forma)retangulo_cria(novoId, forma->dados.retangulo.x, forma->dados.retangulo.y, forma->dados.retangulo.w, forma->dados.retangulo.h, forma->dados.retangulo.corp, forma->dados.retangulo.corb);
 
         case TIPO_LINHA:
-        return (Forma)linha_cria(novoId, forma->dados.linha.x1, forma->dados.linha.y1, forma->dados.linha.x2, forma->dados.linha.y2, forma_getCorComplementar(forma->dados.linha.cor));
+            return (Forma)linha_cria(novoId, forma->dados.linha.x1, forma->dados.linha.y1, forma->dados.linha.x2, forma->dados.linha.y2, forma_getCorComplementar(forma->dados.linha.cor));
 
         case TIPO_TEXTO:
-        return (Forma)texto_cria(novoId, forma->dados.texto.x, forma->dados.texto.y, forma->dados.texto.corp, forma->dados.texto.corb, forma->dados.texto.a, forma->dados.texto.txto);
+            return (Forma)texto_cria(novoId, forma->dados.texto.x, forma->dados.texto.y, forma->dados.texto.corp, forma->dados.texto.corb, forma->dados.texto.a, forma->dados.texto.txto);
     }
 
     // Return para caso de tipo desconhecido.
     return NULL;
 }
+
+/*
+ * Funcoes utilizadas para otimização de verifica sobreposição.
+ */
+
+static int verifica_retangulo_retangulo(EstruturaForma* f1, EstruturaForma* f2) {
+    if (f1->dados.retangulo.x + f1->dados.retangulo.w <= f2->dados.retangulo.x || 
+        f2->dados.retangulo.x + f2->dados.retangulo.w <= f1->dados.retangulo.x ||
+        f1->dados.retangulo.y + f1->dados.retangulo.h <= f2->dados.retangulo.y || 
+        f2->dados.retangulo.y + f2->dados.retangulo.h <= f1->dados.retangulo.y) { 
+        return 0; // Não sobrepõe.
+    }
+    return 1; // Sobrepõe.
+}
+
+static int verifica_circulo_circulo(EstruturaForma* f1, EstruturaForma* f2) {
+    double distanciaAoQuadrado = pow((f1->dados.circulo.x - f2->dados.circulo.x), 2) + pow((f1->dados.circulo.y - f2->dados.circulo.y), 2);
+    if(distanciaAoQuadrado <= pow(f1->dados.circulo.r + f2->dados.circulo.r, 2)) {
+        return 1; // Sobrepõe.
+    }
+
+    return 0; // Não sorepõe.
+}
+
+int verificaSobreposicao(Forma f1, Forma f2){
+    EstruturaForma* forma1 = (EstruturaForma*) f1;
+    EstruturaForma* forma2 = (EstruturaForma*) f2;
+
+    if (forma1 == NULL || forma2 == NULL) {
+        printf("Erro(0) em verificaSobreposicao");
+        return -1;
+    }
+
+    if(forma2->tipo > forma1->tipo) {
+        return verificaSobreposicao(forma2, forma1);
+    }
+
+    
+}
+
+
+
+
+
 
 
