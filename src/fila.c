@@ -4,12 +4,12 @@
 #include <stdio.h>
 
 typedef struct No {
-    void *Elemento;
+    void *elemento;
     struct No* prox;
 } NoFila;
 
 typedef struct fila {
-    NoFila *Inicio;
+    NoFila *inicio;
     NoFila* fim;
     int tamanho;
 } EstruturaFila;
@@ -22,7 +22,7 @@ Fila fila_cria() {
     }
 
     FilaNova->fim = NULL;
-    FilaNova->Inicio = NULL;
+    FilaNova->inicio = NULL;
     FilaNova->tamanho = 0;
 
     return (Fila) FilaNova;
@@ -48,10 +48,11 @@ void fila_adicionaAoFim(Fila f, void* elemento) {
     // O prox do fim é NULL.
     NovoFim->prox = NULL;
 
-    NovoFim->Elemento = elemento;
+    NovoFim->elemento = elemento;
 
     // Como a fila estava vazia, o fim tambem é o inicio.
-    fila->Inicio = NovoFim;
+    fila->inicio = NovoFim;
+    fila->fim = NovoFim;
 
     fila->tamanho++;
     
@@ -60,6 +61,8 @@ void fila_adicionaAoFim(Fila f, void* elemento) {
 
     fila->fim->prox = NovoFim;
     fila->fim = NovoFim;
+
+    fila->tamanho++;
 
     return;
 }
@@ -72,17 +75,17 @@ void* fila_retiraDoInicio(Fila f) {
         return;
     }
 
-    if(fila->Inicio == NULL) {
+    if(fila->inicio == NULL) {
         printf("nao foi possivel retirar da fila, ela esta vazia");
         return;
     }
 
     // Cria uma variável temporária para o Node a ser retirado.
-    NoFila* ItemRetirado = fila->Inicio;
+    NoFila* ItemRetirado = fila->inicio;
 
-    void* ItemRetorno = fila->Inicio->Elemento;
+    void* ItemRetorno = fila->inicio->elemento;
 
-    fila->Inicio = fila->Inicio->prox;
+    fila->inicio = fila->inicio->prox;
 
     free(ItemRetirado);
 
@@ -124,7 +127,7 @@ void fila_destruir(Fila f) {
         return;
     }
 
-    NoFila *atual = fila->Inicio;
+    NoFila *atual = fila->inicio;
     while (atual != NULL) {
         NoFila *prox = atual->prox;
         free(atual);

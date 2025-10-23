@@ -6,12 +6,21 @@
 /*
 * TAD de formas geometricas básicas, como circulo e retangulo,
 * Alem da linha, e do texto, tratados como formas também.
+* As formas são utilizadas como aspecto principal no jogo da bocha.
+* Com elas poderemos checar sobreposição entre uma e outra, a partir de suas coordenadas.
+* Com isso teremos o calculo de pontuação total do jogo.
+*
 * Este arquivo contém funções básicas para manipulação dessas formas.
 */
 
 
 typedef void* Forma;
 
+
+
+/*==========================*/
+/*  Constructors das formas */
+/*==========================*/
 /**
  * @brief Cria um novo Círculo.
  * @param i Identificador do círculo.
@@ -62,42 +71,55 @@ Forma linha_cria(int i, double x1, double y1, double x2, double y2, char *cor);
  */
 Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char *txto);
 
+
+
+/*==========================*/
+/*  Destructor das formas   */
+/*==========================*/
 /**
  * @brief Libera a memória alocada para uma forma.
  * @param f A forma a ser destruída.
  */
 void forma_destruir(Forma f);
 
+
+
+/*====================*/
+/* Getters das formas */
+/*====================*/
 /**
  * @brief Retorna o identificador único da forma.
  * @param f A forma.
- * @return int O identificador
+ * @return int O identificador, ou -1 em caso de erro.
  */
 int forma_getId(Forma f);
+
 
 /**
  * @brief Calcula e retorna a área da forma.
  * @param f A forma.
- * @return double A área calculada.
+ * @return double A área calculada, ou -1 em caso de erro.
  */
 double forma_getArea(Forma f);
 
 /**
- * @brief Pega um cor Hexadecinal e retorna seu complementar.
- * @param Cor 
- * @return double A cor complementar.
+ * @brief Mostra qual a cor de preenchimento atual de uma forma.
+ * @param f A forma.
+ * @return char* A cor de preenchimento dessa forma, ou NULL em caso de erro.
  */
-double forma_getCorComplementar(char* Cor);
+char* forma_getCorPreenchimento(Forma f);
 
 /**
- * @brief Cria e retorna um clone da forma, trocando as cores de borda e preenchimento.
- * Normalmente utilizado quando uma forma é esmagada.
- * @param original A forma original a ser clonada.
- * @param novoId O novo identificador único a ser atribuído ao clone.
- * @return Forma O ponteiro para a nova forma clonada.
+ * @brief Mostra qual a cor de borda atual de uma forma.
+ * @param f a forma.
+ * @return char* A cor de borda dessa forma, ou NULL em caso de erro.
  */
-char* forma_clonar(Forma original, int novoId);
+char* forma_getCorBorda(Forma f);
 
+
+/*==================================*/
+/*  Setters e operações das formas  */
+/*==================================*/
 /**
  * @brief Modifica a cor da borda de uma forma.
  * @param f A forma a ser modificada.
@@ -106,19 +128,20 @@ char* forma_clonar(Forma original, int novoId);
 void forma_setCorBorda(Forma f, char *novaCorBorda);
 
 /**
+ * @brief Cria e retorna um clone da forma, trocando as cores de borda e preenchimento.
+ * Normalmente utilizado quando uma forma é esmagada.
+ * @param original A forma original a ser clonada.
+ * @param novoId O novo identificador único a ser atribuído ao clone.
+ * @return Forma O ponteiro para a nova forma clonada, ou NULL em caso de erro.
+ */
+Forma forma_clonar(Forma original, int novoId);
+
+/**
  * @brief Verifica se duas formas se sobrepõem (intersectam).
  * @param f1 Primeira forma.
  * @param f2 Segunda forma.
  * @return int 1 se houver sobreposição, 0 caso contrário.
  */
 int verificaSobreposicao(Forma f1, Forma f2);
-
-/**
- * @brief Escreve a representação SVG da forma em um arquivo.
- * * @param f A forma.
- * @param svgFile O ponteiro para o arquivo SVG aberto.
- */
-void escreverFormaSVG(Forma f, void *svgFile);
-
 
 #endif

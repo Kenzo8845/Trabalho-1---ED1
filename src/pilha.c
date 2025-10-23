@@ -21,7 +21,7 @@ Pilha pilha_cria() {
     EstruturaPilha *PilhaNova = (EstruturaPilha*) malloc(sizeof(EstruturaPilha));
     if (PilhaNova == NULL) {
         printf("erro ao criar pilha nova");
-        Return NULL;
+        return NULL;
         // Caso haja erro de alocação.
     }
     PilhaNova->topo = NULL;
@@ -101,7 +101,7 @@ bool pilha_vazia(Pilha p) {
     }
 }
 
-void fila_pilha(Pilha p) {
+void pilha_destruir(Pilha p) {
     EstruturaPilha* pilha = (EstruturaPilha*) p;
     if (pilha == NULL) {
         printf("nao foi possivel criar a pilha em: pilha_destruir");
