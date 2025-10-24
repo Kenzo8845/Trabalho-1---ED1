@@ -56,6 +56,14 @@ void arena_destroi(Arena a);
  */
 int arena_getNumeroDeFormas(Arena a);
 
+/**
+ * @brief Retorna a Fila da arena selecionada.
+ * @param c A arena qual se quer a fila.
+ * @return Fila A fila da arena selecionada, ou NULL, em caso de erro.
+ */
+Fila arena_getFila(Arena a);
+
+
 
 /*=====================*/
 /* Operações da Arena  */
@@ -73,7 +81,5 @@ void arena_adicionaForma(Arena a, Forma f);
  * @return Forma um ponteiro para a forma retirada.
  */
 Forma arena_removeForma(Arena a);
-
-
 
 #endif
