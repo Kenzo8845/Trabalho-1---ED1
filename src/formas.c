@@ -1,4 +1,6 @@
 #include "formas.h"
+#include "estilo.h"
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,6 +41,7 @@ typedef struct {
     char *corb, *corp;
     char a;
     char *txto;
+    Estilo estilo;
     double area;
 } EstruturaTexto;
 
@@ -120,7 +123,7 @@ Forma linha_cria(int i, double x1, double y1, double x2, double y2, char *cor) {
     return (Forma)NovaLinha;
 }
 
-Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char *txto) {
+Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char *txto, Estilo e) {
     EstruturaForma *NovoTexto = (EstruturaForma*) malloc(sizeof(EstruturaForma));
     if (NovoTexto == NULL) {
         printf("erro de alocação ao criar novo texto em texto_cria");
@@ -137,6 +140,7 @@ Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char
     NovoTexto->dados.texto.a = a;
     NovoTexto->dados.texto.txto = strdup(txto);
     NovoTexto->dados.texto.area = 20 * strlen(txto);
+    NovoTexto->dados.texto.estilo = e;
 
     return (Forma)NovoTexto;
 }
@@ -174,6 +178,7 @@ void forma_destruir(Forma f) {
             free(forma->dados.texto.corb);
             free(forma->dados.texto.corp);
             free(forma->dados.texto.txto); 
+            estilo_destroi(forma->dados.texto.estilo);
             break;
     }
 
@@ -374,7 +379,7 @@ Forma forma_clonar(Forma original, int novoId) {
             return (Forma)linha_cria(novoId, forma->dados.linha.x1, forma->dados.linha.y1, forma->dados.linha.x2, forma->dados.linha.y2, forma_getCorComplementar(forma->dados.linha.cor));
 
         case TIPO_TEXTO:
-            return (Forma)texto_cria(novoId, forma->dados.texto.x, forma->dados.texto.y, forma->dados.texto.corp, forma->dados.texto.corb, forma->dados.texto.a, forma->dados.texto.txto);
+            return (Forma)texto_cria(novoId, forma->dados.texto.x, forma->dados.texto.y, forma->dados.texto.corp, forma->dados.texto.corb, forma->dados.texto.a, forma->dados.texto.txto, estilo_clona(forma->dados.texto.estilo));
     }
 
     // Return para caso de tipo desconhecido.
