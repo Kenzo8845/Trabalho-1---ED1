@@ -1,6 +1,8 @@
 #ifndef FORMAS_H
 #define FORMAS_H
 
+#include "estilo.h" // Necessario para a criação e manipulação de textos.
+
 #include <stdio.h>
 
 /*
@@ -10,7 +12,7 @@
 * Com elas poderemos checar sobreposição entre uma e outra, a partir de suas coordenadas.
 * Com isso teremos o calculo de pontuação total do jogo.
 *
-* Este arquivo contém funções básicas para manipulação dessas formas.
+* Este arquivo contém funções básicas para manipulação dessas formas e do estilo dos textos.
 */
 
 
@@ -67,9 +69,10 @@ Forma linha_cria(int i, double x1, double y1, double x2, double y2, char *cor);
  * @param corp Cord do preenchimento.
  * @param a Posição da âncora (i: inicio, m: meio, f: fim)
  * @param txto Texto do texto, pode incluir espaços em branco.
+ * @param e Estilo do texto, familia grossura e tamanho da fonte.
  * @return Forma O ponteiro para a nova forma (Texto) ou NULL em caso de erro.
  */
-Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char *txto);
+Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char *txto, Estilo e);
 
 
 
@@ -117,6 +120,7 @@ char* forma_getCorPreenchimento(Forma f);
 char* forma_getCorBorda(Forma f);
 
 
+
 /*==================================*/
 /*  Setters e operações das formas  */
 /*==================================*/
@@ -126,6 +130,20 @@ char* forma_getCorBorda(Forma f);
  * @param novaCorBorda A nova cor da borda (cor de preenchimento de I).
  */
 void forma_setCorBorda(Forma f, char *novaCorBorda);
+
+/**
+ * @brief Muda as coordenadas X de uma forma.
+ * @param f A Forma a ser alterada.
+ * @param novoX As novas coordenadas X da forma.
+ */
+void forma_setX(Forma f, double novoX);
+
+/**
+ * @brief Muda as coordenadas Y de uma forma.
+ * @param f A Forma a ser alterada.
+ * @param novoX As novas coordenadas Y da forma.
+ */
+void forma_setY(Forma f, double novoY);
 
 /**
  * @brief Cria e retorna um clone da forma, trocando as cores de borda e preenchimento.

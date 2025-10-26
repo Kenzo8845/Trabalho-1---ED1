@@ -313,7 +313,6 @@ char* forma_getCorBorda(Forma f) {
 
 
 
-
 /*==================================*/
 /*  Setters e operações das formas  */
 /*==================================*/
@@ -359,6 +358,64 @@ void forma_setCorBorda(Forma f, char* novaCorBorda) {
             return;
     }
     printf("Erro(3) em setCorBorda");
+    return;
+}
+
+void forma_setX(Forma f, double novoX) {
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(0) em forma_setX!\n") ;
+        return;
+    }
+
+     switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            forma->dados.circulo.x = novoX;
+            return;
+        case TIPO_RETANGULO:
+            forma->dados.retangulo.x = novoX;
+            return;
+
+        case TIPO_LINHA:
+            double linhaDx = forma->dados.linha.x2 - forma->dados.linha.x1;
+            forma->dados.linha.x1 = novoX;
+            forma->dados.linha.x2 = novoX + linhaDx;
+            return;
+        
+        case TIPO_TEXTO:
+            forma->dados.texto.x = novoX;
+    }
+
+    printf("Erro(1) em forma_setX\n");
+    return;
+}
+
+void forma_setY(Forma f, double novoY) {
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(0) em forma_setY!\n") ;
+        return;
+    }
+
+     switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            forma->dados.circulo.y = novoY;
+            return;
+        case TIPO_RETANGULO:
+            forma->dados.retangulo.y = novoY;
+            return;
+
+        case TIPO_LINHA:
+            double linhaDy = forma->dados.linha.y2 - forma->dados.linha.y1;
+            forma->dados.linha.y1 = novoY;
+            forma->dados.linha.y2 = novoY + linhaDy;
+            return;
+        
+        case TIPO_TEXTO:
+            forma->dados.texto.y = novoY;
+    }
+
+    printf("Erro(1) em forma_setY\n");
     return;
 }
 

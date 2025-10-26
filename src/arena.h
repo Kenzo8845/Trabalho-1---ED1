@@ -9,8 +9,8 @@
 /*
 * TAD de Arena.
 * A arena é um tipo de fila, com lógica de primeira entrar sera o primerio a sair.
-* Todos os elementos armazenados na Arena serão formas, e o numero maximo de formas na arena é 3. Para calculos de sobreposição.
-* A arena é o local onde as formas disparadas vão parar, e apos 2 formas estarem na arena,
+* Todos os elementos armazenados na Arena serão formas.
+* A arena é o local onde as formas disparadas vão parar, e apos um certo numero de disparos, e formas estarem na arena,
 * é calculado sobreposição, talvez a forma lançada primeiro é clonada,
 * e adicionada ao fim da arena, e as formas são então, retiradas da arena.
 *

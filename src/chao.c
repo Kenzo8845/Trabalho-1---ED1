@@ -59,7 +59,7 @@ Forma chao_retiraForma(Chao c){
 void chao_adicionaAoChao(Chao c, Forma f) {
     EstruturaChao *chao = (EstruturaChao*) c;
     if (chao == NULL || chao->formas == NULL || f == NULL) {
-        printf("Erro(0) em chao_tamanho");
+        printf("Erro(0) em chao_adicionaAoChao");
         return;
     }
 
@@ -69,7 +69,7 @@ void chao_adicionaAoChao(Chao c, Forma f) {
 int chao_getTamanho(Chao c) {
     EstruturaChao *chao = (EstruturaChao*) c;
     if (chao == NULL || chao->formas == NULL) {
-        printf("Erro(0) em chao_tamanho");
+        printf("Erro(0) em chao_getTamanho");
         return -1;
     }
     

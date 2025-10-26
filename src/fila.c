@@ -99,14 +99,14 @@ int fila_tamanho(Fila f) {
     if (fila == NULL) {
         printf("nao foi possivel criar a fila em: fila_tamanho");
         // Erro ao criar a fila.
-        return 0;
+        return -1;
     }
 
     return fila->tamanho;
 }
 
 bool fila_vazia(Fila f) {
- EstruturaFila* fila = (EstruturaFila*) f;
+    EstruturaFila* fila = (EstruturaFila*) f;
     if (fila == NULL) {
         printf("nao foi possivel criar a fila em: fila_vazia");
         // Erro ao criar a fila.

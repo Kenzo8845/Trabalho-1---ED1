@@ -17,10 +17,10 @@
 * Quando uma forma é colocada de um carregador ela é pega do chão.
 * Ao sair da arena, a forma ou é destruida, ou retorna ao chão.
 *
-* Esse arquivo contem todas as funções responsaveis pela manipulação do chão.
+* Este arquivo contem todas as funções responsaveis pela manipulação do chão.
 */
 
-typedef struct EstruturaChao* Chao;
+typedef struct chao* Chao;
 
 
 
