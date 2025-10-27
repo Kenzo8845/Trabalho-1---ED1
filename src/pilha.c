@@ -53,7 +53,7 @@ void pilha_adicionaAoTopo(Pilha p, void* elemento) {
 void* pilha_retiraDoTopo(Pilha p) {
     EstruturaPilha *pilha = (EstruturaPilha*) p;
     if(pilha == NULL) {
-        return;
+        return NULL;
         // A pilha não foi criada.
     }
 
@@ -78,7 +78,7 @@ void* pilha_retiraDoTopo(Pilha p) {
 int pilha_tamanho(Pilha p) {
     EstruturaPilha *pilha = (EstruturaPilha*) p;
     if(pilha == NULL) {
-        return;
+        return -1;
         // A pilha não foi criada.
     }
 
@@ -88,7 +88,7 @@ int pilha_tamanho(Pilha p) {
 bool pilha_vazia(Pilha p) {
     EstruturaPilha *pilha = (EstruturaPilha*) p;
     if(pilha == NULL) {
-        return;
+        return true;
         // A pilha não foi criada.
     }
     

@@ -275,7 +275,7 @@ char* forma_getCorPreenchimento(Forma f) {
             return forma->dados.retangulo.corp;
 
         case TIPO_LINHA:
-            return forma->dados.linha.cor;
+            return forma_getCorComplementar(forma->dados.linha.cor);
 
         case TIPO_TEXTO:
             return forma->dados.texto.corp;
@@ -419,11 +419,14 @@ void forma_setY(Forma f, double novoY) {
     return;
 }
 
-Forma forma_clonar(Forma original, int novoId) {
+Forma forma_clonar(Forma original) {
     EstruturaForma *forma = (EstruturaForma *)original;
     if (original == NULL) { 
         return NULL;
     }
+
+    static int max_id = 10000;
+	int novoId = ++max_id;
 
     switch (forma->tipo) {
         case TIPO_CIRCULO:

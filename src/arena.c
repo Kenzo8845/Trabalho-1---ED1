@@ -80,3 +80,67 @@ Forma arena_removeForma(Arena a) {
 
     return (Forma)formaRetirada;
 }
+
+void arena_processa(Arena a, Chao ch, FILE *txt_fp, FILE *svg_fp, double *area_total_esmagada) {
+    EstruturaArena* arena = (EstruturaArena*) a;
+    if (arena == NULL || ch == NULL || txt_fp == NULL || area_total_esmagada == NULL) {
+        printf("Erro(0) em arena_processa: Parametros invalidos.\\n");
+        return;
+    }
+    
+    double area_esmagada_round = 0.0;
+    fprintf(txt_fp, "\n=== Comando CALC: Processando Arena ===\n");
+
+    while (arena_getNumeroDeFormas(a) >= 2) {
+        
+        Forma i = (Forma)fila_retiraDoInicio(arena->formas); 
+        Forma j = (Forma)fila_retiraDoInicio(arena->formas); 
+
+        int sobreposicao = forma_verificaSobreposicao(i, j);
+
+        if (sobreposicao) {
+            
+            fprintf(txt_fp, "\nVERIFICAÇÃO: Sobreposição entre I (ID %d, A=%.2lf) e J (ID %d, A=%.2lf).\n", 
+                    forma_getId(i), forma_getArea(i), forma_getId(j), forma_getArea(j));
+
+            double area_i = forma_getArea(i);
+            double area_j = forma_getArea(j);
+
+            if (area_i < area_j) {
+                fprintf(txt_fp, "RESULTADO: I (menor) ESMAGADA!. J volta ao Chao.\n");
+                
+                double area_destruida = forma_getArea(i);
+                area_esmagada_round += area_destruida;
+                *area_total_esmagada += area_destruida;
+
+                forma_destruir(i); 
+                chao_adicionaAoChao(ch, j); 
+            } 
+            
+            else  {                
+                fprintf(txt_fp, "RESULTADO: I (maior) troca cor de J. Ambas voltam ao Chao. Clone de I volta ao Chao.\n");
+                forma_setCorBorda(j, forma_getCorPreenchimento(i));
+                Forma clone = forma_clonar(i);
+                chao_adicionaAoChao(ch, i);
+                chao_adicionaAoChao(ch, j);
+                chao_adicionaAoChao(ch, clone);
+            }
+        } 
+        
+        else {
+            fprintf(txt_fp, "VERIFICAÇÃO: Sem sobreposição. Ambas voltam ao Chao.\n");
+            chao_adicionaAoChao(ch, i);
+            chao_adicionaAoChao(ch, j);
+        }
+    }
+
+    if (arena_getNumeroDeFormas(a) == 1) {
+        Forma f_restante = (Forma)fila_retiraDoInicio(arena->formas);
+        fprintf(txt_fp, "\nAVISO CALC: Arena com elemento impar. Forma ID %d volta para o Chao.\n", forma_getId(f_restante));
+        chao_adicionaAoChao(ch, f_restante);
+    }
+
+    fprintf(txt_fp, "\n[RESUMO CALC]\n");
+    fprintf(txt_fp, "Area total esmagada NESTE round: %.2lf\n", area_esmagada_round);
+    fprintf(txt_fp, "Area total esmagada no JOGO: %.2lf\n", *area_total_esmagada);
+}
