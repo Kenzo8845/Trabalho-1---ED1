@@ -3,27 +3,36 @@
 #include "fila.h" 
 #include "formas.h" 
 #include "estilo.h" 
+#include "svg.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-Chao processaGeo(const char *path_geo) {
+Chao processaGeo(const char *path_geo, const char *path_svg_geo) {
     FILE *arquivo_geo = fopen(path_geo, "r");
     if (arquivo_geo == NULL) {
         printf("erro ao abrir arquivo geo\n");
         return NULL;
     }
 
+    FILE *svg_file = svg_inicia(path_svg_geo);
+    if (svg_file == NULL) {
+        printf("Erro: Nao foi possivel criar o SVG 1 (geo) em %s\n", path_svg_geo);
+    }
+
+
     Fila formas_chao = fila_cria();
     if (formas_chao == NULL) {
         fclose(arquivo_geo);
+        if (svg_file) svg_finaliza(svg_file);
         return NULL;
     }
 
     Chao chao = chao_cria(formas_chao);
     if (chao == NULL) {
         fclose(arquivo_geo);
+        if (svg_file) svg_finaliza(svg_file);
         return NULL;
     }
 
@@ -52,6 +61,11 @@ Chao processaGeo(const char *path_geo) {
             if (n_lidos < 4) continue;
 
             Forma f = circulo_cria(id, x, y, r, corb, corp);
+
+            if (f && svg_file) {
+                forma_desenhaSvg(f, svg_file);
+            }
+
             chao_adicionaAoChao(chao, f);
         }
 
@@ -65,6 +79,10 @@ Chao processaGeo(const char *path_geo) {
 
             Forma f = retangulo_cria(id, x, y, w, h, corb, corp);
 
+            if (f && svg_file) {
+                forma_desenhaSvg(f, svg_file);
+            }
+
             chao_adicionaAoChao(chao, f);
         }
 
@@ -75,6 +93,10 @@ Chao processaGeo(const char *path_geo) {
             if (n_lidos < 5) continue;
 
             Forma f = linha_cria(id, x1, y1, x2, y2, cor);
+
+            if (f && svg_file) {
+                forma_desenhaSvg(f, svg_file);
+            }
 
             chao_adicionaAoChao(chao, f);
         }
@@ -106,9 +128,9 @@ Chao processaGeo(const char *path_geo) {
 
             estilo_destroi(estilo_temp);
 
+            if (f && svg_file) {
+                forma_desenhaSvg(f, svg_file);
 
-
-            if (f) {
                 chao_adicionaAoChao(chao, f);
             }
         }
@@ -125,6 +147,12 @@ Chao processaGeo(const char *path_geo) {
             }
         }
     }
+
+        if (svg_file) {
+        svg_finaliza(svg_file);
+        }
+
+        
         fclose(arquivo_geo);
         return chao;
 }
