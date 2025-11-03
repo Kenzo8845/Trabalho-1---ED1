@@ -126,7 +126,6 @@ Chao processaGeo(const char *path_geo, const char *path_svg_geo) {
             
             Forma f = texto_cria(id, x, y, corb, corp, a, txto, estilo_temp);
 
-            estilo_destroi(estilo_temp);
 
             if (f && svg_file) {
                 forma_desenhaSvg(f, svg_file);
@@ -147,12 +146,14 @@ Chao processaGeo(const char *path_geo, const char *path_svg_geo) {
             }
         }
     }
+    int num_formas = chao_getTamanho(chao);
+    printf("DEBUG processaGeo: %d formas criadas e adicionadas ao chao\n", num_formas);
 
-        if (svg_file) {
+    if (svg_file) {
         svg_finaliza(svg_file);
-        }
+    }
 
         
-        fclose(arquivo_geo);
-        return chao;
+    fclose(arquivo_geo);
+    return chao;
 }
