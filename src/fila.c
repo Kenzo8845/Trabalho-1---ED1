@@ -25,7 +25,7 @@ Fila fila_cria() {
     FilaNova->inicio = NULL;
     FilaNova->tamanho = 0;
 
-    return (Fila) FilaNova;
+    return (Fila)FilaNova;
 }
 
 void fila_adicionaAoFim(Fila f, void* elemento) {
@@ -44,19 +44,19 @@ void fila_adicionaAoFim(Fila f, void* elemento) {
         return;
     }
 
-    if(fila->tamanho == 0) {
-    // O prox do fim é NULL.
-    NovoFim->prox = NULL;
-
+    NovoFim->prox = NULL; 
     NovoFim->elemento = elemento;
 
-    // Como a fila estava vazia, o fim tambem é o inicio.
-    fila->inicio = NovoFim;
-    fila->fim = NovoFim;
+    if(fila->tamanho == 0) {
 
-    fila->tamanho++;
-    
-    return;
+        NovoFim->prox = NULL;
+        NovoFim->elemento = elemento;
+
+        fila->inicio = NovoFim;
+        fila->fim = NovoFim;
+
+        fila->tamanho++;
+        return;
     }
 
     fila->fim->prox = NovoFim;
@@ -70,25 +70,25 @@ void fila_adicionaAoFim(Fila f, void* elemento) {
 void* fila_retiraDoInicio(Fila f) {
     EstruturaFila* fila = (EstruturaFila*) f;
     if (fila == NULL) {
-        // Erro ao criar a fila.
-        print("nao foi possivel criar a fila em: fila_retiraDoInicio");
-        return;
+        printf("nao foi possivel criar a fila em: fila_retiraDoInicio\n");
+        return NULL;
     }
 
-    if(fila->inicio == NULL) {
-        printf("nao foi possivel retirar da fila, ela esta vazia");
-        return;
+    if(fila->inicio == NULL) { 
+        printf("nao foi possivel retirar da fila, ela esta vazia\n");
+        return NULL;
     }
 
-    // Cria uma variável temporária para o Node a ser retirado.
     NoFila* ItemRetirado = fila->inicio;
-
     void* ItemRetorno = fila->inicio->elemento;
 
     fila->inicio = fila->inicio->prox;
+    
+    if (fila->inicio == NULL) {
+        fila->fim = NULL;
+    }
 
     free(ItemRetirado);
-
     fila->tamanho--;
 
     return ItemRetorno;
@@ -108,15 +108,10 @@ int fila_tamanho(Fila f) {
 bool fila_vazia(Fila f) {
     EstruturaFila* fila = (EstruturaFila*) f;
     if (fila == NULL) {
-        printf("nao foi possivel criar a fila em: fila_vazia");
-        // Erro ao criar a fila.
-        return;
+        printf("nao foi possivel criar a fila em: fila_vazia (fila e nula)\n");
+        return true; 
     }
-    if (fila->tamanho == 0) {
-        return true;
-    }
-
-    return false;
+    return (fila->tamanho == 0); 
 }
 
 void fila_destruir(Fila f) {
