@@ -54,7 +54,7 @@ void carregador_destroi(Carregador c) {
         }
     }
     
-    pilha_destroi(carregador->formas);
+    pilha_destruir(carregador->formas);
     free(carregador);
 }
 
@@ -69,7 +69,7 @@ void carregador_carregaForma(Carregador c, Forma f) {
         return;
     }
     
-    pilha_empilha(carregador->formas, (void*)f); 
+    pilha_adicionaAoTopo(carregador->formas, (void*)f); 
 }
 
 void carregador_carregaNFormas(Carregador c, Chao ch, int n) {
@@ -99,7 +99,7 @@ Forma carregador_descarregaForma(Carregador c) {
         return NULL;
     }
     
-    return (Forma)pilha_desempilha(carregador->formas); 
+    return (Forma)pilha_retiraDoTopo(carregador->formas); 
 }
 
 

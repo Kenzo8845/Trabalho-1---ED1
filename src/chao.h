@@ -85,4 +85,16 @@ int chao_getTamanho(Chao c);
 Fila chao_getFila(Chao c);
 
 
+
+/*====================*/
+/* Funções de Desenho */
+/*====================*/
+/**
+ * @brief Desenha todas as formas do Chão em um arquivo SVG.
+ * @param c O Chão.
+ * @param svg_file O ponteiro do arquivo SVG.
+ */
+void chao_desenhaSvg(Chao c, FILE* svg_file);
+
+
 #endif

@@ -100,7 +100,6 @@ Forma disparador_shift(Disparador d, char lado, int n) {
     }
 
     Carregador origem_nova_forma, destino_forma_atual;
-    Forma forma_final = disparador->forma_em_disparo;
 
     for (int i = 0; i < n; i++) {
         if (lado == 'e') {
@@ -118,23 +117,20 @@ Forma disparador_shift(Disparador d, char lado, int n) {
 
         if (!carregador_estaVazio(origem_nova_forma)) {
             disparador->forma_em_disparo = carregador_descarregaForma(origem_nova_forma);
-            forma_final = disparador->forma_em_disparo;
         } else {
-            printf("Aviso em disparador_shift: Carregador %s vazio na repeticao %d.\n", 
-                   (lado == 'e' ? "direito" : "esquerdo"), i + 1);
-            
-            return NULL; 
+            printf("Aviso em disparador_shift: Carregador origem vazio (shift %d/%d).\n", i + 1, n);
         }
     }
     
-    return forma_final;
+    return disparador->forma_em_disparo;
 }
+
 
 
 /*=============================*/
 /* Operação de Disparo         */
 /*=============================*/
-Forma disparador_dispara(Disparador d, double dx, double dy, Arena a) {
+Forma disparador_dispara(Disparador d, double dx, double dy, Arena a, FILE* svg_file, int desenha_trajetoria) {
     EstruturaDisparador *disparador = (EstruturaDisparador*) d;
     if (disparador == NULL || a == NULL) {
         printf("Erro(0) em disparador_dispara: Disparador ou Arena invalida.\n");
@@ -147,11 +143,19 @@ Forma disparador_dispara(Disparador d, double dx, double dy, Arena a) {
     }
     
     Forma formaDisparada = disparador->forma_em_disparo;
+    
+    double x_inicial = disparador->x;
+    double y_inicial = disparador->y;
+    
     double novoX = disparador->x + dx;
     double novoY = disparador->y + dy;
     
     forma_setX(formaDisparada, novoX);
     forma_setY(formaDisparada, novoY);
+
+     if (desenha_trajetoria && svg_file != NULL) {
+        svg_desenha_trajetoria(svg_file, x_inicial, y_inicial, novoX, novoY);
+    }
     
     arena_adicionaForma(a, formaDisparada);
     
@@ -184,7 +188,6 @@ Fila disparador_rajada(Disparador d, char lado, double dx, double dy, double ix,
     Carregador origem = (lado == 'e') ? disparador->direito : disparador->esquerdo;
 
     while (!carregador_estaVazio(origem) || disparador->forma_em_disparo != NULL) {
-        i++; 
 
         Forma forma_engatilhada = disparador_shift(d, lado, 1);
         
@@ -194,8 +197,9 @@ Fila disparador_rajada(Disparador d, char lado, double dx, double dy, double ix,
 
         double novo_dx = dx + (ix * i);
         double novo_dy = dy + (iy * i);
+        i++;
 
-        forma_disparada = disparador_dispara(d, novo_dx, novo_dy, a);
+        forma_disparada = disparador_dispara(d, novo_dx, novo_dy, a, NULL, 0);
 
         if (forma_disparada != NULL) {
             fila_adicionaAoFim(formas_disparadas, forma_disparada);

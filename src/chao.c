@@ -79,9 +79,33 @@ int chao_getTamanho(Chao c) {
 Fila chao_getFila(Chao c) {
     EstruturaChao *chao = (EstruturaChao*) c;
     if (chao == NULL || chao->formas == NULL) {
-        printf("Erro(0) em chao_getFila");
+        printf("Erro(0) em chao_getFila\n");
         return NULL;
     }
 
     return chao->formas;
+}
+
+void chao_desenhaSvg(Chao c, FILE* svg_file) {
+    EstruturaChao *chao = (EstruturaChao*) c;
+    
+    if (chao == NULL || chao->formas == NULL || svg_file == NULL) {
+        printf("Erro(0) em chao_desenhaSvg\n");
+        return;
+    }
+
+    int n = fila_tamanho(chao->formas);
+    if (n == 0) {
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        Forma f = (Forma)fila_retiraDoInicio(chao->formas);
+        
+        if (f != NULL) {
+            forma_desenhaSvg(f, svg_file); 
+            
+            fila_adicionaAoFim(chao->formas, f);
+        }
+    }
 }

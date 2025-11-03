@@ -3,6 +3,8 @@
 
 #include "fila.h"
 #include "formas.h"
+#include "chao.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -81,5 +83,16 @@ void arena_adicionaForma(Arena a, Forma f);
  * @return Forma um ponteiro para a forma retirada.
  */
 Forma arena_removeForma(Arena a);
+
+/**
+ * @brief Processa as formas na Arena de 2 em 2, aplicando a lógica da Bocha Geométrica e 
+ * reportando os resultados no arquivo TXT, e no SVG (para formas esmagadas).
+ * @param a A Arena a ser processada.
+ * @param ch O TAD Chao.
+ * @param txt_fp O ponteiro do arquivo de saída TXT.
+ * @param svg_fp O ponteiro do arquivo de saída SVG.
+ * @param area_total_esmagada Ponteiro para a variável que armazena a área total esmagada no jogo.
+ */
+void arena_processa(Arena a, Chao ch, FILE *txt, FILE *svg_pos_calc, double *area_total_esmagada);
 
 #endif
