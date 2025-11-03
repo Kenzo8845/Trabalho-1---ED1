@@ -2,6 +2,8 @@
 #include "carregador.h"
 #include "arena.h"
 #include "formas.h"
+#include "svg.h"
+
 #include "fila.h" 
 #include <stdlib.h>
 #include <stdio.h>
