@@ -48,6 +48,7 @@ void pilha_adicionaAoTopo(Pilha p, void* elemento) {
     NovoTopo->elemento = elemento;
     NovoTopo->prox = pilha->topo;
     pilha->topo = NovoTopo;
+    pilha->tamanho++;
 }
 
 void* pilha_retiraDoTopo(Pilha p) {
@@ -55,6 +56,10 @@ void* pilha_retiraDoTopo(Pilha p) {
     if(pilha == NULL) {
         return NULL;
         // A pilha não foi criada.
+    }
+
+    if (pilha->tamanho == 0) {
+        return NULL; 
     }
 
     // NoRetirado é o topo atual da pilha.
@@ -91,31 +96,24 @@ bool pilha_vazia(Pilha p) {
         return true;
         // A pilha não foi criada.
     }
-    
-    if (pilha->tamanho == 0) {
-        return true;
-    }
-    
-    else {
-        return false;
-    }
+
+    return (pilha->tamanho == 0);
+
 }
 
 void pilha_destruir(Pilha p) {
-    EstruturaPilha* pilha = (EstruturaPilha*) p;
-    if (pilha == NULL) {
-        printf("nao foi possivel criar a pilha em: pilha_destruir");
-        // Erro ao criar a pilha.
+    EstruturaPilha *pilha = (EstruturaPilha*) p;
+    if(pilha == NULL) {
         return;
     }
 
-    NoPilha *atual = pilha->topo;
-    while (atual != NULL) {
-        NoPilha *prox = atual->prox;
-        free(atual);
-        atual = prox;
+    NoPilha *no_atual = pilha->topo;
+    while (no_atual != NULL) {
+        NoPilha *no_proximo = no_atual->prox;
+        free(no_atual);
+        no_atual = no_proximo;
     }
-
+    
     free(pilha);
 }
 
