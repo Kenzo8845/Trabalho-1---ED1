@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "svg.h"
 
 
@@ -56,7 +58,38 @@ void svg_desenha_texto(FILE* f, double x, double y, char* corb, char* corp, char
         anr_str = "end";
     }
 
-    fprintf(f, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"%s\" stroke=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%.1fpx\" text-anchor=\"%s\">%s</text>\n", x, y, corp, corb, fFamily, fWeight, fSize, anr_str, txto);
+     const char* weight_svg = "normal";
+
+    if (fWeight != NULL) {
+        if (strcmp(fWeight, "n") == 0) {
+            weight_svg = "normal";
+        } else if (strcmp(fWeight, "b") == 0) {
+            weight_svg = "bold";
+        } else if (strcmp(fWeight, "b+") == 0) {
+            weight_svg = "bolder";
+        } else if (strcmp(fWeight, "l") == 0) {
+            weight_svg = "lighter";
+        } else {
+            weight_svg = fWeight;
+        }
+    }
+
+    const char* family_svg = "sans-serif";
+    
+    if (fFamily != NULL) {
+        if (strcmp(fFamily, "sans") == 0) {
+            family_svg = "sans-serif";
+        } else if (strcmp(fFamily, "serif") == 0) {
+            family_svg = "serif";
+        } else if (strcmp(fFamily, "cursive") == 0) {
+            family_svg = "cursive";
+        } else {
+            family_svg = fFamily;
+        }
+    }
+
+    fprintf(f, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"%s\" stroke=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%.1fpx\" text-anchor=\"%s\">%s</text>\n", 
+            x, y, corp, corb, family_svg, weight_svg, fSize, anr_str, txto);
 }
 
 void svg_desenha_asterisco(FILE* f, double x, double y) {
