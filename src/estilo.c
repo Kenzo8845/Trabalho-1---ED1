@@ -13,6 +13,28 @@ typedef struct estilo {
 } EstruturaEstilo;
 
 
+
+/**
+ * @brief Duplica uma string (versão C99-compatível do strdup).
+ */
+static char* duplicar_string(const char* s) {
+    if (s == NULL) {
+        return NULL;
+    }
+
+    size_t len = strlen(s) + 1; 
+
+    char* nova_string = (char*) malloc(len);
+    if (nova_string == NULL) {
+        return NULL;
+    }
+
+    strcpy(nova_string, s);
+
+    return nova_string;
+}
+
+
 /*=======================*/
 /* Constructor do Estilo */
 /*=======================*/
@@ -24,11 +46,11 @@ Estilo estilo_cria(char* fFamily, char* fWeight, double fSize) {
     }
 
     if (fFamily == NULL || fWeight == NULL) {
-        NovoEstilo->fFamily = strdup("sans-serif");
-        NovoEstilo->fWeight = strdup("normal");
+        NovoEstilo->fFamily = duplicar_string("sans-serif");
+        NovoEstilo->fWeight = duplicar_string("normal");
     } else {
-        NovoEstilo->fFamily = strdup(fFamily);
-        NovoEstilo->fWeight = strdup(fWeight);
+        NovoEstilo->fFamily = duplicar_string(fFamily);
+        NovoEstilo->fWeight = duplicar_string(fWeight);
     }
     
     if (NovoEstilo->fFamily == NULL || NovoEstilo->fWeight == NULL) {
@@ -97,7 +119,7 @@ void estilo_setFamily(Estilo e, char* family) {
         free(estilo->fFamily);
     }
 
-    estilo->fFamily = strdup(family);
+    estilo->fFamily = duplicar_string(family);
 
     if (estilo->fFamily == NULL) {
         printf("Erro em estilo_setFamily: falha na alocacao de string.\n");
@@ -112,7 +134,7 @@ void estilo_setWeight(Estilo e, char* weight) {
         free(estilo->fWeight);
     }
 
-    estilo->fWeight = strdup(weight);
+    estilo->fWeight = duplicar_string(weight);
     
     if (estilo->fWeight == NULL) {
         printf("Erro em estilo_setWeight: falha na alocacao de string.\n");
