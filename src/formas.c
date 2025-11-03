@@ -1,5 +1,6 @@
 #include "formas.h"
 #include "estilo.h"
+#include "svg.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -58,6 +59,27 @@ typedef struct {
 
 
 
+/**
+ * @brief Duplica uma string (versão C99-compatível do strdup).
+ */
+static char* duplicar_string(const char* s) {
+    if (s == NULL) {
+        return NULL;
+    }
+
+    size_t len = strlen(s) + 1; 
+
+    char* nova_string = (char*) malloc(len);
+    if (nova_string == NULL) {
+        return NULL;
+    }
+
+    strcpy(nova_string, s);
+
+    return nova_string;
+}
+
+
 
 
 /*==========================*/
@@ -76,8 +98,8 @@ Forma circulo_cria(int i, double x, double y, double r, char *corb, char *corp) 
     NovoCirculo->dados.circulo.r = r;
     NovoCirculo->dados.circulo.x = x;
     NovoCirculo->dados.circulo.y = y;
-    NovoCirculo->dados.circulo.corb = strdup(corb);
-    NovoCirculo->dados.circulo.corp = strdup(corp);
+    NovoCirculo->dados.circulo.corb = duplicar_string(corb);
+    NovoCirculo->dados.circulo.corp = duplicar_string(corp);
     NovoCirculo->dados.circulo.area = 3.1415926 * (r*r);
     return (Forma)NovoCirculo;
 }
@@ -96,8 +118,8 @@ Forma retangulo_cria(int i, double x, double y, double w, double h, char *corb, 
     NovoRetangulo->dados.retangulo.y = y;
     NovoRetangulo->dados.retangulo.w = w;
     NovoRetangulo->dados.retangulo.h = h;
-    NovoRetangulo->dados.retangulo.corb = strdup(corb);
-    NovoRetangulo->dados.retangulo.corp = strdup(corp);
+    NovoRetangulo->dados.retangulo.corb = duplicar_string(corb);
+    NovoRetangulo->dados.retangulo.corp = duplicar_string(corp);
     NovoRetangulo->dados.retangulo.area = w*h;
 
     return (Forma)NovoRetangulo;
@@ -117,7 +139,7 @@ Forma linha_cria(int i, double x1, double y1, double x2, double y2, char *cor) {
     NovaLinha->dados.linha.x2 = x2;
     NovaLinha->dados.linha.y1 = y1;
     NovaLinha->dados.linha.y2 = y2;
-    NovaLinha->dados.linha.cor = strdup(cor);
+    NovaLinha->dados.linha.cor = duplicar_string(cor);
     NovaLinha->dados.linha.area = forma_getArea(NovaLinha);
 
     return (Forma)NovaLinha;
@@ -135,10 +157,10 @@ Forma texto_cria(int i, double x, double y, char* corb, char *corp, char a, char
     NovoTexto->id = i;
     NovoTexto->dados.texto.x = x;
     NovoTexto->dados.texto.y = y;
-    NovoTexto->dados.texto.corb = strdup(corb);
-    NovoTexto->dados.texto.corp = strdup(corp);
+    NovoTexto->dados.texto.corb = duplicar_string(corb);
+    NovoTexto->dados.texto.corp = duplicar_string(corp);
     NovoTexto->dados.texto.a = a;
-    NovoTexto->dados.texto.txto = strdup(txto);
+    NovoTexto->dados.texto.txto = duplicar_string(txto);
     NovoTexto->dados.texto.area = 20 * strlen(txto);
     NovoTexto->dados.texto.estilo = e;
 
@@ -310,6 +332,59 @@ char* forma_getCorBorda(Forma f) {
     return NULL;
 }
 
+double forma_getX(Forma f) {
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(0) em forma_getX!\n") ;
+        return -1;
+    }
+
+    switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            return forma->dados.circulo.x;
+       
+        case TIPO_RETANGULO:
+            return forma->dados.retangulo.x;
+
+        case TIPO_LINHA:
+            if (forma->dados.linha.x1 < forma->dados.linha.x2) return forma->dados.linha.x1;
+            else return forma->dados.linha.x2;
+
+        case TIPO_TEXTO:
+            return forma->dados.texto.x;
+    }
+
+    printf("Erro(1) em forma_setX\n");
+    return -1;
+}
+
+
+double forma_getY(Forma f){
+    EstruturaForma* forma = (EstruturaForma*) f;
+    if (f == NULL) {
+        printf("Erro(0) em forma_getY!\n") ;
+        return -1;
+    }
+
+    switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            return forma->dados.circulo.y;
+       
+        case TIPO_RETANGULO:
+            return forma->dados.retangulo.y;
+
+        case TIPO_LINHA:
+            if (forma->dados.linha.y1 < forma->dados.linha.y2) return forma->dados.linha.y1;
+            else return forma->dados.linha.y2;
+
+        case TIPO_TEXTO:
+            return forma->dados.texto.y;
+    }
+
+    printf("Erro(1) em forma_setY\n");
+    return -1;
+}
+
 
 
 
@@ -329,7 +404,7 @@ void forma_setCorBorda(Forma f, char* novaCorBorda) {
         return;
     }
 
-    char *novaCorAlocada = strdup(novaCorBorda);
+    char *novaCorAlocada = duplicar_string(novaCorBorda);
     if (novaCorAlocada == NULL) {
         printf("Erro(2) em setCorBorda");
         return;
@@ -384,6 +459,7 @@ void forma_setX(Forma f, double novoX) {
         
         case TIPO_TEXTO:
             forma->dados.texto.x = novoX;
+            return;
     }
 
     printf("Erro(1) em forma_setX\n");
@@ -413,6 +489,7 @@ void forma_setY(Forma f, double novoY) {
         
         case TIPO_TEXTO:
             forma->dados.texto.y = novoY;
+            return;
     }
 
     printf("Erro(1) em forma_setY\n");
@@ -836,4 +913,48 @@ int verificaSobreposicao(Forma f1, Forma f2){
     }
     printf("Erro(1) em verificaSobreposicao");
     return 0; // Se chegar tipo nao existente, retorna nao sobrepoe.
+}
+
+/*=======================*/
+/* Função de Desenho SVG */
+/*=======================*/
+
+void forma_desenhaSvg(Forma f, FILE* svg_file) {
+    
+    EstruturaForma *forma = (EstruturaForma*) f; 
+    if (forma == NULL || svg_file == NULL) return;
+
+    switch (forma->tipo) {
+        case TIPO_CIRCULO:
+            svg_desenha_circulo(svg_file,
+                forma->dados.circulo.x, forma->dados.circulo.y,
+                forma->dados.circulo.r,
+                forma->dados.circulo.corb, forma->dados.circulo.corp);
+            break;
+            
+        case TIPO_RETANGULO:
+            svg_desenha_retangulo(svg_file,
+                forma->dados.retangulo.x, forma->dados.retangulo.y,
+                forma->dados.retangulo.w, forma->dados.retangulo.h,
+                forma->dados.retangulo.corb, forma->dados.retangulo.corp);
+            break;
+            
+        case TIPO_LINHA:
+            svg_desenha_linha(svg_file,
+                forma->dados.linha.x1, forma->dados.linha.y1,
+                forma->dados.linha.x2, forma->dados.linha.y2,
+                forma->dados.linha.cor);
+            break;
+            
+        case TIPO_TEXTO:
+            svg_desenha_texto(svg_file,
+                forma->dados.texto.x, forma->dados.texto.y,
+                forma->dados.texto.corb, forma->dados.texto.corp,
+                forma->dados.texto.txto,
+                estilo_getFamily(forma->dados.texto.estilo),
+                estilo_getWeight(forma->dados.texto.estilo),
+                estilo_getSize(forma->dados.texto.estilo),
+                forma->dados.texto.a);
+            break;
+    }
 }

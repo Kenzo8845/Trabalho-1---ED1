@@ -119,6 +119,16 @@ char* forma_getCorPreenchimento(Forma f);
  */
 char* forma_getCorBorda(Forma f);
 
+/**
+ * @brief Pega a coordenada x da ancora de uma forma f.
+ */
+double forma_getX(Forma f);
+
+/**
+ * @brief Pega a coordenada Y da ancora de uma forma f.
+ */
+double forma_getY(Forma f);
+
 
 
 /*==================================*/
@@ -146,13 +156,11 @@ void forma_setX(Forma f, double novoX);
 void forma_setY(Forma f, double novoY);
 
 /**
- * @brief Cria e retorna um clone da forma, trocando as cores de borda e preenchimento.
- * Normalmente utilizado quando uma forma é esmagada.
+ * @brief Cria e retorna um clone da forma, invertendo as cores de borda e preenchimento.
  * @param original A forma original a ser clonada.
- * @param novoId O novo identificador único a ser atribuído ao clone.
  * @return Forma O ponteiro para a nova forma clonada, ou NULL em caso de erro.
  */
-Forma forma_clonar(Forma original, int novoId);
+Forma forma_clonar(Forma original);
 
 /**
  * @brief Verifica se duas formas se sobrepõem (intersectam).
@@ -161,5 +169,15 @@ Forma forma_clonar(Forma original, int novoId);
  * @return int 1 se houver sobreposição, 0 caso contrário.
  */
 int verificaSobreposicao(Forma f1, Forma f2);
+
+/*=========================*/
+/* Função de Desenho em SVG*/
+/*=========================*/
+/**
+ * @brief Desenha uma forma em um arquivo SVG.
+ * @param f A forma a ser desenhada.
+ * @param svg_file O ponteiro do arquivo SVG onde desenhar.
+ */
+void forma_desenhaSvg(Forma f, FILE* svg_file);
 
 #endif
